@@ -17,30 +17,22 @@ knnEval <-
         misscli[i]=1-sum(diag(tab))/sum(tab)
         #Precision and recall for each and every level
         for(j in 1:k)
-        { 
-          if(sum(tab[,j])!=0)
-          {
-          pr[j]  =  tab[j,j]/sum(tab[,j]);
+        { if(sum(tab[,j])!=0)
+          { pr[j]  =  tab[j,j]/sum(tab[,j]);
           }
           else if( tab[j,j] == 0)
-          {
-            pr[j] = 1
+          { pr[j] = 1
           }
           if(sum(tab[j,])!=0)
           {rec[j] =  tab[j,j]/sum(tab[j,]);
           }
           else if(tab[j,j] == 0)
-          {
-            rec[j] = 1
-            
-          }
+          { rec[j] = 1
+               }
         }
       }
      
-      if(sum(pr) == 3)
-      {
-        print(tab)
-      }
+     
       list(mean=mean(misscli),se=sd(misscli)/sqrt(kfold),all=misscli,precision = pr, recall =rec )
     }
     
