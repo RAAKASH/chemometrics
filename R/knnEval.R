@@ -23,7 +23,7 @@ evalSEfac <- function(pred,grptrain,spltr,grplev){
 }
 
 #require(class)
- levlen =   length(level(factor(grp)))
+ levlen =   length(levels(factor(grp)))
 # main routine
   ntrain=length(train)
   lknnvec=length(knnvec)
