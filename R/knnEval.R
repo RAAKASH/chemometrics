@@ -12,12 +12,17 @@ evalSEfac <- function(pred,grptrain,spltr,grplev){
   for (i in 1:kfold){
     tab=table(grptrain[spltr==i],pred[spltr==i])
     misscli[i]=1-sum(diag(tab))/sum(tab)
-  }
-  list(mean=mean(misscli),se=sd(misscli)/sqrt(kfold),all=misscli)
+    #Precision and recall for each and every level
+    for(j in 1:k)
+    {
+     pr[j]  =  tab[j,j]/sum(tab[,j]);
+     rec[j] =  tab[j,j]/sum(tab[j,]);
+    }
+  list(mean=mean(misscli),se=sd(misscli)/sqrt(kfold),all=misscli,precision = pr, recall =rec )
 }
 
 #require(class)
-
+ levlen =   length(level(factor(grp)))
 # main routine
   ntrain=length(train)
   lknnvec=length(knnvec)
@@ -26,6 +31,8 @@ evalSEfac <- function(pred,grptrain,spltr,grplev){
   cvMean=rep(NA,lknnvec)
   cvSe=rep(NA,lknnvec)
   cverr=matrix(NA,nrow=kfold,ncol=lknnvec)
+  cvPr=matrix(NA,nrow=levlen,ncol=lknnvec)
+  cvRe=matrix(NA,nrow=levlen,ncol=lknnvec)
 #  require(class)
   for (j in 1:lknnvec){
     pred=knn(X[train,],X[-train,],factor(grp[train]),k=knnvec[j])
@@ -46,6 +53,9 @@ evalSEfac <- function(pred,grptrain,spltr,grplev){
     cverr[,j] <- resi$all
     cvMean[j] <- resi$mean
     cvSe[j] <- resi$se
+    #Precision and recall added
+    cvRe[,j] <- resi$recall
+    cvPr[,j]  <- resi$precision
   }
 
   if (plotit){
@@ -71,6 +81,6 @@ evalSEfac <- function(pred,grptrain,spltr,grplev){
     }
   }
   list(trainerr=trainerr,testerr=testerr,cvMean=cvMean,cvSe=cvSe,
-       cverr=cverr,knnvec=knnvec)
+       cverr=cverr,cvRecall =cvRe,cvPrecision = cvPr,knnvec=knnvec)
 }
 
