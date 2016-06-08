@@ -35,13 +35,13 @@ knnEval <-
       }
       
       #Finding standard deviation for precision
-      for(l in k)
+      for(l in 1:k)
       {
         recsd[l] = sd(rec[l,])
         prsd[l] = sd(pr[l,])
       }
       
-      
+    
       #Taking avg of Kfold
       pr<- rowSums(pr)/kfold 
       rec <-rowSums(rec)/kfold
