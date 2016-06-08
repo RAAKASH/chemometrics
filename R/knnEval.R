@@ -12,14 +12,16 @@ knnEval <-
       misscli=rep(NA,k)
       pr=matrix(NA,nrow = k ,ncol =kfold)
       rec=matrix(NA,nrow = k ,ncol =kfold)
+      prsd = rep(NA,k)
+      recsd =rep(NA,k)
       for (i in 1:kfold){
         tab=table(grptrain[spltr==i],pred[spltr==i])
         misscli[i]=1-sum(diag(tab))/sum(tab)
         #Precision and recall for each and every level
         for(j in 1:k)
         { if(sum(tab[,j])!=0)
-          { pr[j,i]  =  tab[j,j]/sum(tab[,j]);
-          }
+        { pr[j,i]  =  tab[j,j]/sum(tab[,j]);
+        }
           else if( tab[j,j] == 0)
           { pr[j,i] = 1
           }
@@ -28,14 +30,23 @@ knnEval <-
           }
           else if(tab[j,j] == 0)
           { rec[j,i] = 1
-               }
+          }
         }
       }
+      
+      #Finding standard deviation for precision
+      for(l in k)
+      {
+        recsd[l] = sd(rec[l,])
+        prsd[l] = sd(pr[l,])
+      }
+      
+      
       #Taking avg of Kfold
-     pr<- rowSums(pr)/kfold 
-     rec <-rowSums(rec)/kfold
-     
-      list(mean=mean(misscli),se=sd(misscli)/sqrt(kfold),all=misscli,precision = pr, recall =rec )
+      pr<- rowSums(pr)/kfold 
+      rec <-rowSums(rec)/kfold
+      
+      list(mean=mean(misscli),se=sd(misscli)/sqrt(kfold),all=misscli,precision = pr, recall =rec ,precisionsd=prsd,recallsd=recsd)
     }
     
     #require(class)
@@ -50,6 +61,8 @@ knnEval <-
     cverr=matrix(NA,nrow=kfold,ncol=lknnvec)
     cvPr=matrix(NA,nrow=levlen,ncol=lknnvec)
     cvRe=matrix(NA,nrow=levlen,ncol=lknnvec)
+    cvReSd = matrix(NA,nrow=levlen,ncol=lknnvec)
+    cvPrSd =matrix(NA,nrow=levlen,ncol=lknnvec)
     #  require(class)
     for (j in 1:lknnvec){
       pred=knn(X[train,],X[-train,],factor(grp[train]),k=knnvec[j])
@@ -73,7 +86,9 @@ knnEval <-
       #Precision and recall added
       cvRe[,j] <- resi$recall
       cvPr[,j]  <- resi$precision
-    }
+      cvReSd[,j] <-resi$recallsd
+      cvPrSd[,j] <- resi$precisionsd
+      }
     
     if (plotit){
       ymax=max(trainerr,testerr,cvMean+cvSe)
@@ -98,6 +113,6 @@ knnEval <-
       }
     }
     list(trainerr=trainerr,testerr=testerr,cvMean=cvMean,cvSe=cvSe,
-         cverr=cverr,cvRecall =cvRe,cvPrecision = cvPr,knnvec=knnvec)
+         cverr=cverr,cvRecall =cvRe,cvPrecision = cvPr,cvPrecisionSd = cvPrSd,knnvec=knnvec)
   }
 
