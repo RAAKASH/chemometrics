@@ -18,6 +18,7 @@ evalSEfac <- function(pred,grptrain,spltr,grplev){
      pr[j]  =  tab[j,j]/sum(tab[,j]);
      rec[j] =  tab[j,j]/sum(tab[j,]);
     }
+    }
   list(mean=mean(misscli),se=sd(misscli)/sqrt(kfold),all=misscli,precision = pr, recall =rec )
 }
 
