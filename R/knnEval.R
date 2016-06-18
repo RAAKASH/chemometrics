@@ -99,6 +99,6 @@ knnEval <-
       }
     }
     list(trainerr=trainerr,testerr=testerr,cvMean=cvMean,cvSe=cvSe,
-         cverr=cverr,cvRecall =cvRe,cvPrecision = cvPr,cvPrecisionSd = cvPrSd,knnvec=knnvec)
+         cverr=cverr,cvRecall =cvRe,cvRecallSd=cvReSd,cvPrecision = cvPr,cvPrecisionSd = cvPrSd,knnvec=knnvec)
   }
 
