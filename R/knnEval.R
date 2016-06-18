@@ -18,28 +18,14 @@ knnEval <-
         tab=table(grptrain[spltr==i],pred[spltr==i])
         misscli[i]=1-sum(diag(tab))/sum(tab)
         #Precision and recall for each and every level
-        for(j in 1:k)
-        { if(sum(tab[,j])!=0)
-        { pr[j,i]  =  tab[j,j]/sum(tab[,j]);
-        }
-          else if( tab[j,j] == 0)
-          { pr[j,i] = 1
-          }
-          if(sum(tab[j,])!=0)
-          {rec[j,i] =  tab[j,j]/sum(tab[j,]);
-          }
-          else if(tab[j,j] == 0)
-          { rec[j,i] = 1
-          }
-        }
+        for(j in 1:k){ if(sum(tab[,j])!=0){pr[j,i] =tab[j,j]/sum(tab[,j])}
+                       else if( tab[j,j] == 0){pr[j,i]=1}
+                       if(sum(tab[j,])!=0){rec[j,i] =  tab[j,j]/sum(tab[j,])}
+                       else if(tab[j,j] == 0){ rec[j,i] = 1}}
       }
-      
       #Finding standard deviation for precision
-      for(l in 1:k)
-      {
-        recsd[l] = sd(rec[l,])
-        prsd[l] = sd(pr[l,])
-      }
+      for(l in 1:k){recsd[l] = sd(rec[l,])
+                    prsd[l] = sd(pr[l,])}
       
     
       #Taking avg of Kfold
